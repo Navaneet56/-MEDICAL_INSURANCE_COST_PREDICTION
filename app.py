@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. Premium Medical Theme (Refined CSS for Perfect Alignment)
+# 2. Premium Medical Theme
 st.markdown("""
     <style>
     .stApp {
@@ -21,8 +21,6 @@ st.markdown("""
         background-attachment: fixed;
         color: #f8fafc;
     }
-    
-    /* Input field styling */
     .stNumberInput div div input, .stSelectbox div div select {
         background-color: rgba(30, 41, 59, 0.9) !important;
         color: #06b6d4 !important;
@@ -30,20 +28,11 @@ st.markdown("""
         border-radius: 8px;
         font-weight: bold;
     }
-    
-    /* Clean fallback for dropdown items container */
-    div[data-baseweb="select"] {
-        background-color: rgba(30, 41, 59, 0.9) !important;
-        border-radius: 8px;
-    }
-    
     label p {
         color: #e2e8f0 !important;
         font-weight: 600 !important;
         font-size: 14px !important;
-        margin-bottom: 4px;
     }
-    
     div.stButton > button:first-child {
         background: linear-gradient(90deg, #0891b2 0%, #0369a1 100%);
         color: white;
@@ -55,15 +44,13 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(8, 145, 178, 0.3);
         transition: all 0.3s ease;
         width: 100%;
-        margin-top: 25px;
+        margin-top: 15px;
     }
-    
     div.stButton > button:first-child:hover {
         background: linear-gradient(90deg, #06b6d4 0%, #0891b2 100%);
         box-shadow: 0 0 25px #06b6d4;
         color: #0f172a;
     }
-    
     .valuation-box {
         padding: 25px;
         border-radius: 12px;
@@ -86,15 +73,14 @@ st.markdown("---")
 
 # 3. Load Saved Model Artifact
 try:
-    with open('medical_insurance_model.sav', 'rb') as f_model:
+    with open('medical_insurance.sav', 'rb') as f_model:
         model = pickle.load(f_model)
 except FileNotFoundError:
-    st.error("🚨 File Loss Error: 'medical_insurance_model.sav' could not be found. Please save your model inside your notebook first.")
+    st.error("🚨 File Loss Error: 'medical_insurance.sav' could not be found.")
     st.stop()
 
 st.markdown("#### Patient Metrics Profile (6 Features)")
 
-# Organizing 6 features cleanly into 2 columns
 col1, col2 = st.columns(2)
 
 with col1:
@@ -109,25 +95,21 @@ with col2:
 
 # 4. Prediction Execution
 if st.button("CALCULATE PREMIUM ESTIMATE"):
-    # Feature transformations mapping directly to model assumptions
-    sex_encoded = 1 if sex == "male" else 0
+    sex_encoded = 0 if sex == "female" else 1
     smoker_encoded = 0 if smoker == "yes" else 1
     
     region_mapping = {"southwest": 0, "southeast": 1, "northwest": 2, "northeast": 3}
     region_encoded = region_mapping[region]
     
-    # Pack array elements in exact shape
-    features = [age, sex_encoded, bmi, children, smoker_encoded, region_encoded]
+    features = [float(age), float(sex_encoded), float(bmi), float(children), float(smoker_encoded), float(region_encoded)]
     input_array = np.asarray(features).reshape(1, -1)
     
-    # Inference execution
     prediction = model.predict(input_array)
     estimated_cost = prediction[0]
     
     if estimated_cost < 0:
         estimated_cost = 0.0
         
-    # Render premium styled performance result container
     st.markdown(
         f'<div class="valuation-box">'
         f'📈 ESTIMATED ANNUAL PREMIUM:<br>'
