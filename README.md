@@ -5,10 +5,6 @@ An automated predictive web application built using **Streamlit** and **Scikit-L
 
 ---
 
-## 🔗 Live Application Link
-You can try the live, interactive web application instantly here:
-👉 
-
 ## 🚀 Features
 - **Premium Dark Cyber Theme:** Features a professional teal/slate UI custom-styled with responsive layout styling.
 - **Accurate Predictions:** Inputs are processed instantly through a saved `.sav` model artifact built in a Jupyter Notebook pipeline.
