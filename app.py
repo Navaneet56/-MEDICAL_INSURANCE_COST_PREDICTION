@@ -1,4 +1,3 @@
-%%writefile app.py
 import streamlit as st
 import numpy as np
 import pickle
@@ -95,6 +94,7 @@ with col2:
 
 # 4. Prediction Execution
 if st.button("CALCULATE PREMIUM ESTIMATE"):
+    # Fix mapping variables 
     sex_encoded = 0 if sex == "female" else 1
     smoker_encoded = 0 if smoker == "yes" else 1
     
